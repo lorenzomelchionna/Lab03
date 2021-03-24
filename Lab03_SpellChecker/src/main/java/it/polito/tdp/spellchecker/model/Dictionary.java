@@ -45,7 +45,7 @@ public class Dictionary {
 			
 	}
 	
-	public List<RichWord> spellCheckText(List<String> inputTextList){
+	public List<RichWord> spellCheckTextLinear(List<String> inputTextList){
 		
 		boolean corrispondenza;
 		
@@ -60,6 +60,54 @@ public class Dictionary {
 				}
 			
 			ParoleControllate.add(new RichWord(i,corrispondenza));
+		
+		}
+		
+		for(RichWord r : ParoleControllate)
+			if(r.corretta == false) {
+				
+				paroleSbagliate += r.parola+"\n";
+				numeroErrori++;
+				
+			}
+		
+		return ParoleControllate;
+		
+	}
+	
+	public List<RichWord> spellCheckTextDicotomic(List<String> inputTextList) {
+		
+		boolean corrispondenza;
+		
+		List<String> Dizionario2 = new ArrayList<>();
+		Dizionario2 = Dizionario;
+		
+		for(String i : inputTextList) {
+			
+			corrispondenza = false;
+			
+			int pointer = Dizionario2.size()/2;
+				
+			while(!(i.equals(Dizionario2.get(pointer))) && Dizionario2.size()>1) {
+				
+				if(i.compareTo(Dizionario2.get(pointer)) < 0) {
+					//Dizionario2.clear();
+					Dizionario2 = Dizionario2.subList(0, pointer);
+
+				} else {
+					//Dizionario2.clear();
+					Dizionario2 = Dizionario2.subList(pointer+1, Dizionario2.size());
+				}
+				
+				pointer = Dizionario2.size()/2;
+				
+			}
+			
+			if(i.equals(Dizionario2.get(pointer))) {
+				corrispondenza = true;
+			}
+			
+			ParoleControllate.add(new RichWord(i, corrispondenza));
 		
 		}
 		
